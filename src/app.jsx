@@ -30,6 +30,8 @@ const App = () => {
     const [updateTitle, setUpdateTitle] = useState("");
     const [updateBody, setUpdateBody] = useState("");
     const [posts, setPosts] = useState([]);
+    const [search, setSearch] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
     const fetchPosts = async () => {
         try {
@@ -100,6 +102,20 @@ const App = () => {
         }
     };
 
+    useEffect(() => {
+        if (search.trim() !== "") {
+            const results = posts.filter((post) => {
+                return Object.values(post)
+                    .join("")
+                    .toLowerCase()
+                    .includes(search.toLowerCase());
+            });
+            setSearchResults(results);
+        } else {
+            setSearchResults(posts);
+        }
+    }, [search, posts]);
+
     return (
         <BrowserRouter>
             <div className="bg-yellow-400 h-screen">
@@ -108,9 +124,12 @@ const App = () => {
                         "bg-white sm:w-[38rem] overflow-auto w-80 h-[30rem] absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] rounded-md shadow-xl"
                     }
                 >
-                    <Header />
+                    <Header setSearch={setSearch} search={search} />
                     <Routes>
-                        <Route path="/" element={<Home posts={posts} />} />
+                        <Route
+                            path="/"
+                            element={<Home posts={searchResults} />}
+                        />
                         <Route
                             path="/post"
                             element={

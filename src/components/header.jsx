@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const Header = () => {
+const Header = ({ search, setSearch }) => {
     return (
         <div
             className={
@@ -18,6 +18,22 @@ const Header = () => {
                     <h1 className="mx-1">Post</h1>
                 </Link>
             </div>
+            <form
+                className="flex justify-end"
+                onSubmit={(e) => e.preventDefault()}
+            >
+                <input
+                    className={
+                        "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-10/12 p-2"
+                    }
+                    placeholder="search..."
+                    value={search}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        console.log(search);
+                    }}
+                />
+            </form>
         </div>
     );
 };
