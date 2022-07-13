@@ -7,6 +7,7 @@ import NewPost from "./pages/new-post";
 import PostPage from "./pages/post-page";
 import Error from "./pages/error";
 import axios from "axios";
+import UpdatePost from "./pages/update-post";
 
 const m = new Date();
 const dateString =
@@ -26,6 +27,8 @@ const App = () => {
     // const navigate = useNavigate();
     const [postTitle, setPostTitle] = useState("");
     const [postBody, setPostBody] = useState("");
+    const [updateTitle, setUpdateTitle] = useState("");
+    const [updateBody, setUpdateBody] = useState("");
     const [posts, setPosts] = useState([]);
 
     const fetchPosts = async () => {
@@ -76,6 +79,27 @@ const App = () => {
         }
     };
 
+    const handleUpdate = async (id) => {
+        try {
+            const response = await axios.put(
+                `http://localhost:3001/posts/${id}`,
+                {
+                    // id: id,
+                    title: updateTitle,
+                    body: updateBody,
+                    date: dateString,
+                }
+            );
+            const data = response.data;
+            console.log(data);
+            setPosts(posts.map((post) => (post.id === id ? data : post)));
+            setUpdateBody("");
+            setUpdateTitle("");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <BrowserRouter>
             <div className="bg-yellow-400 h-screen">
@@ -100,11 +124,25 @@ const App = () => {
                             }
                         />
                         <Route
+                            path="update/:id"
+                            element={
+                                <UpdatePost
+                                    posts={posts}
+                                    title={updateTitle}
+                                    setUpdateBody={setUpdateBody}
+                                    body={updateBody}
+                                    setUpdateTitle={setUpdateTitle}
+                                    handleUpdate={handleUpdate}
+                                />
+                            }
+                        />
+                        <Route
                             path="/posts/:id"
                             element={
                                 <PostPage
                                     posts={posts}
                                     handleDelete={handleDelete}
+                                    handleUpdate={handleUpdate}
                                 />
                             }
                         />

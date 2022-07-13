@@ -6,12 +6,11 @@ const SinglePost = ({ post }) => {
             <div className="p-2 shadow-md">
                 <h1 className={"font-semibold"}>{post.title}</h1>
                 <h1 className="text-sm text-gray-500">{post.date}</h1>
-                {/* <h1>
-                    {(post.body).lenght <= 30
+                <h1>
+                    {post.body.length <= 30
                         ? post.body
-                        : `${(post.body).slice(0, 30)}...`}
-                </h1> */}
-                <h1>{post.body}</h1>
+                        : `${post.body.slice(0, 30)}...`}
+                </h1>
             </div>
         </Link>
     );
